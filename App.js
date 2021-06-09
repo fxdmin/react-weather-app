@@ -24,6 +24,7 @@ export default class extends React.Component {
       this.setState({
         isLoading: false,
         condition: weather[0].main,
+        icon: weather[0].icon,
         temp
       });
   };
