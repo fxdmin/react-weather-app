@@ -13,10 +13,19 @@ export default class extends React.Component {
     isLoading: true
   };
   getWeather = async(latitude, longitude) => {
-      const { data } = await axios.get(
+      const {
+        data : {
+          main : {temp},
+          weather
+        }
+      } = await axios.get(
         `http://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`
       );
-      this.setState({isLoading: false, temp: data.main.temp });
+      this.setState({
+        isLoading: false,
+        condition: weather[0].main,
+        temp
+      });
   };
 
   getLocation = async() => {
@@ -36,7 +45,7 @@ export default class extends React.Component {
     this.getLocation();
   } 
   render(){
-    const { isLoading, temp } = this.state;
-    return isLoading? <Loading />: <Weather temp={Math.round(temp*10)/10}/>;
+    const { isLoading, temp, condition } = this.state;
+    return isLoading? <Loading />: <Weather temp={Math.round(temp*10)/10} condition={condition}/>; //소수점 한 자리수까지 출력
   }
 }
