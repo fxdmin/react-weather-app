@@ -1,10 +1,9 @@
-import { StatusBar } from 'expo-status-bar';
-import {Alert} from "react-native";
+import {Alert, TextComponent} from "react-native";
 import React from 'react';
-import Loading from "./Loading";
+import Loading from "./app/Loading";
 import * as Location from "expo-location";
 import axios from "axios";
-import Weather from "./Weather";
+import Weather from "./app/Weather";
 
 const API_KEY = "59fd839806a34ceafc609b2f8ffb328e";
 
@@ -16,7 +15,8 @@ export default class extends React.Component {
       const {
         data : {
           main : {temp},
-          weather
+          weather,
+          name
         }
       } = await axios.get(
         `http://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`
@@ -25,7 +25,8 @@ export default class extends React.Component {
         isLoading: false,
         condition: weather[0].main,
         icon: weather[0].icon,
-        temp
+        temp,
+        name: name
       });
   };
 
@@ -46,7 +47,7 @@ export default class extends React.Component {
     this.getLocation();
   } 
   render(){
-    const { isLoading, temp, condition } = this.state;
-    return isLoading? <Loading />: <Weather temp={Math.round(temp*10)/10} condition={condition}/>; //소수점 한 자리수까지 출력
+    const { isLoading, temp, condition, name } = this.state;
+    return isLoading? <Loading />: <Weather temp={Math.round(temp*10)/10} condition={condition} name={name}/>;
   }
 }
